@@ -1,0 +1,128 @@
+﻿// ============================================================
+//  Wobble — Mood State Machine
+//  Handles mood changes, blinking, and idle micro-behaviors.
+// ============================================================
+
+const STAGE_ID = "wobble-stage";
+
+const MOODS = [
+  "happy", "sleepy", "hungry", "excited",
+  "sad", "angry", "curious", "sick"
+];
+
+let currentMood = "happy";
+let stageEl = null;
+let blinkTimer = null;
+
+// ---- Init ------------------------------------------------------
+export function initMoods() {
+  stageEl = document.getElementById(STAGE_ID);
+  if (!stageEl) {
+    console.warn("[moods] #wobble-stage not found");
+    return;
+  }
+  setMood("happy", { animate: false });
+  scheduleBlink();
+}
+
+// ---- Set mood --------------------------------------------------
+export function setMood(mood, opts = {}) {
+  if (!MOODS.includes(mood)) return;
+  if (!stageEl) return;
+
+  const { animate = true } = opts;
+
+  // Remove any existing mood class
+  MOODS.forEach(m => stageEl.classList.remove(`mood-${m}`));
+
+  // Add new one on next frame so CSS transition triggers
+  if (animate) {
+    stageEl.style.transform = "scale(0.96)";
+    requestAnimationFrame(() => {
+      stageEl.classList.add(`mood-${mood}`);
+      stageEl.style.transform = "";
+    });
+  } else {
+    stageEl.classList.add(`mood-${mood}`);
+  }
+
+  currentMood = mood;
+}
+
+export function getMood() {
+  return currentMood;
+}
+
+// ---- Blink scheduling ------------------------------------------
+function scheduleBlink() {
+  clearTimeout(blinkTimer);
+  const delay = 2400 + Math.random() * 3600;
+  blinkTimer = setTimeout(() => {
+    doBlink();
+    scheduleBlink();
+  }, delay);
+}
+
+function doBlink() {
+  if (!stageEl) return;
+  // Sleepy Wobble blinks slowly
+  const duration = currentMood === "sleepy" ? 380 : 120;
+
+  stageEl.classList.add("blinking");
+  setTimeout(() => stageEl.classList.remove("blinking"), duration);
+
+  // Occasionally double-blink
+  if (Math.random() < 0.25) {
+    setTimeout(() => {
+      stageEl.classList.add("blinking");
+      setTimeout(() => stageEl.classList.remove("blinking"), duration);
+    }, duration + 90);
+  }
+}
+
+// ---- Idle micro-behaviors --------------------------------------
+// Small random gestures that make Wobble feel alive.
+const IDLE_MOODS = ["happy", "curious", "excited"];
+
+export function startIdleMoods() {
+  const tick = () => {
+    // Only shift mood if currently in a "normal" state.
+    // Real moods (hungry/sad/sick) are driven by stats later.
+    if (IDLE_MOODS.includes(currentMood)) {
+      const roll = Math.random();
+      if (roll < 0.55) {
+        setMood("curious");
+        setTimeout(() => setMood("happy"), 2200 + Math.random() * 1600);
+      } else if (roll < 0.8) {
+        setMood("excited");
+        setTimeout(() => setMood("happy"), 1400 + Math.random() * 900);
+      }
+      // else: stay in happy
+    }
+    setTimeout(tick, 7000 + Math.random() * 8000);
+  };
+  setTimeout(tick, 5000);
+}
+
+// ---- Manual overrides (called by app.js on user interaction) ---
+export function petReaction() {
+  setMood("happy");
+  // brief excited flash
+  setTimeout(() => setMood("excited"), 180);
+  setTimeout(() => setMood("happy"), 1100);
+}
+
+export function tooMuchPetting() {
+  setMood("angry");
+  setTimeout(() => setMood("curious"), 1200);
+  setTimeout(() => setMood("happy"), 2400);
+}
+
+export function onIdleLong() {
+  setMood("sleepy");
+}
+
+export function onWake() {
+  setMood("curious");
+  setTimeout(() => setMood("happy"), 1400);
+}

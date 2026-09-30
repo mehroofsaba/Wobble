@@ -1,0 +1,55 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <radialGradient id="bodyGrad" cx="40%" cy="35%" r="70%">
+      <stop offset="0%"  stop-color="#FFF4FA"/>
+      <stop offset="55%" stop-color="#E2D2F6"/>
+      <stop offset="100%" stop-color="#CBB6E8"/>
+    </radialGradient>
+    <radialGradient id="earGrad" cx="40%" cy="35%" r="70%">
+      <stop offset="0%"  stop-color="#F6E9FF"/>
+      <stop offset="100%" stop-color="#D2BEEF"/>
+    </radialGradient>
+    <radialGradient id="cheekGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"  stop-color="#FFB4C6" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#FFB4C6" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="hpGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"  stop-color="#D8C8F0"/>
+      <stop offset="100%" stop-color="#9F86C8"/>
+    </linearGradient>
+  </defs>
+  <ellipse id="shadow" cx="100" cy="182" rx="52" ry="7" fill="#A08FB8" opacity="0.22"/>
+  <g id="body">
+    <ellipse id="ear-left"  cx="52"  cy="55" rx="18" ry="18" fill="url(#earGrad)"/>
+    <ellipse id="ear-right" cx="148" cy="55" rx="18" ry="18" fill="url(#earGrad)"/>
+    <ellipse cx="52"  cy="55" rx="7" ry="7" fill="#E7D4FF" opacity="0.7"/>
+    <ellipse cx="148" cy="55" rx="7" ry="7" fill="#E7D4FF" opacity="0.7"/>
+    <ellipse id="torso" cx="100" cy="115" rx="72" ry="68" fill="url(#bodyGrad)"/>
+    <ellipse cx="100" cy="115" rx="72" ry="68" fill="none" stroke="#B49FD6" stroke-width="1" opacity="0.35"/>
+    <ellipse cx="82" cy="90" rx="22" ry="16" fill="#FFFFFF" opacity="0.35"/>
+  </g>
+  <g id="cheeks">
+    <ellipse id="cheek-left"  cx="62"  cy="132" rx="11" ry="7" fill="url(#cheekGrad)"/>
+    <ellipse id="cheek-right" cx="138" cy="132" rx="11" ry="7" fill="url(#cheekGrad)"/>
+  </g>
+  <g id="face">
+    <g id="eyes">
+      <ellipse id="eye-left"  cx="80" cy="118" rx="6" ry="8" fill="#4A3B5C"/>
+      <ellipse id="eye-right" cx="120" cy="118" rx="6" ry="8" fill="#4A3B5C"/>
+      <circle cx="82" cy="115" r="2" fill="#FFFFFF" opacity="0.9"/>
+      <circle cx="122" cy="115" r="2" fill="#FFFFFF" opacity="0.9"/>
+    </g>
+    <path id="mouth" d="M94 140 Q100 146 106 140" fill="none" stroke="#4A3B5C" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+  <g id="headphones">
+    <path d="M40 100 Q40 40 100 40 Q160 40 160 100" fill="none" stroke="url(#hpGrad)" stroke-width="10" stroke-linecap="round"/>
+    <rect x="28"  y="92" width="22" height="30" rx="11" fill="#B49FD6" stroke="#8F76BC" stroke-width="1.5"/>
+    <rect x="150" y="92" width="22" height="30" rx="11" fill="#B49FD6" stroke="#8F76BC" stroke-width="1.5"/>
+    <circle cx="39"  cy="107" r="4" fill="#FFF4FA" opacity="0.7"/>
+    <circle cx="161" cy="107" r="4" fill="#FFF4FA" opacity="0.7"/>
+  </g>
+  <g id="paws">
+    <ellipse id="paw-left"  cx="72"  cy="176" rx="14" ry="8" fill="#EADCF8" stroke="#C7B3E6" stroke-width="1"/>
+    <ellipse id="paw-right" cx="128" cy="176" rx="14" ry="8" fill="#EADCF8" stroke="#C7B3E6" stroke-width="1"/>
+  </g>
+</svg>

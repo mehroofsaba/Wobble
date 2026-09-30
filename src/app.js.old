@@ -1,0 +1,114 @@
+﻿// ============================================================
+//  Wobble — Phase 2 App
+//  Wires the SVG sprite + mood system + idle dialogue together.
+// ============================================================
+
+import { initSprite } from "./sprite.js";
+import { initMoods, setMood, startIdleMoods, petReaction, tooMuchPetting } from "./moods.js";
+
+const speechEl = document.getElementById("speech");
+const petBtn   = document.getElementById("pet-btn");
+const stageEl  = document.getElementById("wobble-stage");
+
+// ---- Dialogue pools ------------------------------------------
+const LINES = {
+  greet: [
+    "hi! i'm wobble ♡",
+    "you're back! ♡",
+    "oh! hello again.",
+    "i was waiting for you…"
+  ],
+  idle: [
+    "whatcha doing?",
+    "hmm…",
+    "i like it here.",
+    "your cursor is fun to watch.",
+    "do you ever just… exist?",
+    "ooh, a pixel.",
+    "is it snack time yet?",
+    "i'm not doing anything. you?",
+    "sometimes i think about clouds.",
+    "you're doing great, by the way."
+  ],
+  petted: [
+    "hehe ♡",
+    "again!!",
+    "that's the spot~",
+    "eee! ♡",
+    "oh… oh that's nice.",
+    "purrrr…",
+    "you have warm hands.",
+    "okay okay i love you."
+  ],
+  annoyed: [
+    "hey! too much!!",
+    "i'm not a button >:(",
+    "okay that's enough.",
+    "rude.",
+    "hmph!"
+  ]
+};
+
+let petCount = 0;
+let petCooldown = null;
+
+function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+let speechTimeout = null;
+function say(text, duration = 2400) {
+  speechEl.textContent = text;
+  speechEl.style.animation = "none";
+  void speechEl.offsetWidth;
+  speechEl.style.animation = "speechIn .35s ease";
+  clearTimeout(speechTimeout);
+  speechTimeout = setTimeout(() => { speechEl.textContent = "…"; }, duration);
+}
+
+// ---- Idle dialogue loop --------------------------------------
+function startIdleLoop() {
+  const tick = () => {
+    const roll = Math.random();
+    if (roll < 0.55) {
+      say(pick(LINES.idle));
+    }
+    setTimeout(tick, 7000 + Math.random() * 8000);
+  };
+  setTimeout(tick, 4500);
+}
+
+// ---- Petting --------------------------------------------------
+function petWobble() {
+  petCount++;
+  clearTimeout(petCooldown);
+  petCooldown = setTimeout(() => (petCount = 0), 4000);
+
+  if (petCount >= 7) {
+    say(pick(LINES.annoyed));
+    tooMuchPetting();
+    return;
+  }
+  say(pick(LINES.petted));
+  petReaction();
+}
+
+// ---- Wire up --------------------------------------------------
+petBtn.addEventListener("click", petWobble);
+stageEl.addEventListener("click", petWobble);
+
+document.addEventListener("keydown", (e) => {
+  if (e.code === "Space" && document.activeElement.tagName !== "BUTTON") {
+    e.preventDefault();
+    petWobble();
+  }
+});
+
+// ---- Boot -----------------------------------------------------
+async function boot() {
+  await initSprite();
+  initMoods();
+  startIdleMoods();
+  say(pick(LINES.greet), 3200);
+  startIdleLoop();
+}
+
+window.addEventListener("DOMContentLoaded", boot);
