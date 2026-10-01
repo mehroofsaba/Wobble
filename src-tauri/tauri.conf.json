@@ -1,34 +1,17 @@
 {
-  "$schema": "https://schema.tauri.app/config/2",
-  "productName": "wobble",
-  "version": "0.1.0",
-  "identifier": "com.wobble.desktop",
-  "build": {
-    "frontendDist": "../src"
-  },
+  "productName": "Wobble",
+  "version": "1.0.0",
+  "identifier": "com.wobble.app",
+  "build": { "frontendDist": "../src" },
   "app": {
+    "withGlobalTauri": true,
     "windows": [
-      {
-        "label": "main",
-        "title": "Wobble",
-        "width": 900,
-        "height": 650,
-        "resizable": true,
-        "fullscreen": false,
-        "center": true,
-        "decorations": true,
-        "transparent": false,
-        "devtools": true,
-        "additionalBrowserArgs": "--disable-gpu --disable-gpu-compositing --disable-features=msWebView2Composition --use-angle=swiftshader"
-      }
+      { "label": "main", "title": "Wobble", "url": "index.html", "width": 980, "height": 640, "minWidth": 820, "minHeight": 560 },
+      { "label": "companion", "title": "Wobble Companion", "url": "index.html?c=1", "width": 200, "height": 230,
+        "transparent": true, "decorations": false, "alwaysOnTop": true, "skipTaskbar": true,
+        "resizable": false, "shadow": false, "visible": false }
     ],
-    "security": {
-      "csp": null
-    }
+    "security": { "csp": null }
   },
-  "bundle": {
-    "active": true,
-    "targets": ["msi", "nsis"],
-    "icon": ["icons/32x32.png", "icons/128x128.png", "icons/icon.ico"]
-  }
+  "bundle": { "active": true, "targets": "all", "icon": ["icons/32x32.png", "icons/128x128.png", "icons/icon.ico"] }
 }
